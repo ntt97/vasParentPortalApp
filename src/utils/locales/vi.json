@@ -1,0 +1,47 @@
+{
+  "login_title": "Login",
+  "login_emailFormat": "Invalid email format",
+  "login_emailRequired": "Please input your email.",
+  "login_passwordRequired": "Please input your password.",
+  "login_emailPlaceholder": "Enter your email",
+  "login_passwordPlaceholder": "Enter your password",
+  "login_loginError": "Your password is incorrect. Please try again.",
+  "login_forgotPassword": "Forgot password?",
+  "login_btnLogin": "Login",
+  "login_labelEmail": "Email",
+  "login_labelPassword": "Password",
+
+  "listMenu_home": "Home",
+  "listMenu_event": "School Events",
+  "listMenu_user": "User Profile",
+  "listMenu_student": "Student Profile",
+  "listMenu_changePassword":"Change Password",
+  "listMenu_logOut":"Log out",
+
+  "forgot_headerTitle": "Forget Password",
+  "forgot_emailFormat": "Invalid email format",
+  "forgot_emailRequired": "Please fill out this field.",
+  "forgot_contentTitle": "Enter your email address",
+  "forgot_emailPlaceholder": "Enter your email address",
+  "forgot_description": "We'll send you a Verification Code to your email address.",
+  "forgot_btnSubmit": "Continue",
+
+  "verifyCode_headerTitle_register": "Register",
+  "verifyCode_headerTitle_forgetPassword": "Forget Password",
+  "verifyCode_contentTitle": "Verification Code",
+  "verifyCode_description":"Enter Verification Code sent to your email address.",
+  "verifyCode_btnSubmit":"Continue",
+  "verifyCode_didNotRecieveCode":"Didn't recieve code?",
+  "verifyCode_resend":"Resend",
+
+
+  "enterPassword_headerTitle": "Register",
+  "enterPassword_passwordMinLength": "Password must be at least 6 characters.",
+  "enterPassword_passwordRequired": "Please fill out this field.",
+  "enterPassword_rePasswordRequired": "Please fill out this field.",
+  "enterPassword_rePasswordNotMatch": "Password is not matched.",
+  "enterPassword_contentTitle": "Enter Password",
+  "enterPassword_labelPassword": "Enter your password",
+  "enterPassword_labelRePassword": "Re-enter the password",
+  "enterPassword_btnSubmit":"Register"
+}
