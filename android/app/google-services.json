@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "478692280823",
+    "firebase_url": "https://school-vas.firebaseio.com",
+    "project_id": "school-vas",
+    "storage_bucket": "school-vas.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:478692280823:android:85f318e8d25301b80e06f2",
+        "android_client_info": {
+          "package_name": "com.exe.school.vas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "478692280823-e7okk7bckqbb24io1otrjq5g9jbtk8en.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.exe.school.vas",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "478692280823-d3gdlbrtuuoc7iejh0u91kuer89t5r62.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCn5JYQBboGlg61nicL3f4nudEoyFfIhpI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "478692280823-d3gdlbrtuuoc7iejh0u91kuer89t5r62.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "478692280823-e8ljr0g1q8eq5f87vctnt6l5h3pv9876.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.exe.school.vas"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
