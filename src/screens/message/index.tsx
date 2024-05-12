@@ -17,7 +17,8 @@ import NavigationActionsService from '@utils/navigation';
 import TabBarBottom from './tab-bar-bottom';
 import {getCurrentUser} from '@utils/helper';
 
-const MessageScreen = (props: any) => {
+const MessageScreen = ({route}: any) => {
+  const props = route.params;
   const [currentScreen, setCurrentScreen] = useState('channel');
   const [isShowBottom, setIsShowBottom] = useState(true);
 

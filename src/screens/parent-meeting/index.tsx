@@ -1,12 +1,20 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Alert, Image, Platform, ScrollView, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
-import { ViewHorizontal, ViewVertical } from 'components/viewBox.component';
+import React, {useCallback, useEffect, useState} from 'react';
+import {
+  Alert,
+  Image,
+  Platform,
+  ScrollView,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
+import {ViewHorizontal, ViewVertical} from 'components/viewBox.component';
 import styles from './styles';
-import { Calendar, DateObject } from 'react-native-calendars';
+import {Calendar, DateObject} from 'react-native-calendars';
 import moment from 'moment';
 import colors from 'constants/colors';
 import Header from '@components/header/header.component';
-import { strings } from '@utils/i18n';
+import {strings} from '@utils/i18n';
 import {
   BACK_ARROW,
   IC_STUDENT,
@@ -15,18 +23,14 @@ import {
   IC_STUDENT_GRAY,
   IC_LOCATION_GRAY,
   IC_CLOCK_GRAY,
-  IC_SHARE
+  IC_SHARE,
 } from 'assets/';
-import { fontFamilies, fontSizes } from '@constants/fonts';
+import {fontFamilies, fontSizes} from '@constants/fonts';
 import NavigationActionsService from '@utils/navigation';
 import Text from '@components/text.component';
 import BaseService from 'services';
 import get from 'lodash.get';
 import * as AddCalendarEvent from 'react-native-add-calendar-event';
-
-
-
-
 
 const THEME_COLOR: any = {
   backgroundColor: '#ffffff',
@@ -65,13 +69,16 @@ const SELECTED_DATE: any = {
   selectedTextColor: '#205072',
 };
 
-const ParentMeetingScreen = (props: any) => {
-  const [dateSelected, setDateSelected] = useState<any>(moment().format('YYYY-MM-DD'));
+const ParentMeetingScreen = () => {
+  const [dateSelected, setDateSelected] = useState<any>(
+    moment().format('YYYY-MM-DD'),
+  );
   const [meetingData, setMeetingData] = useState<any[]>([]);
   const [dateExistMeeting, setDateExistMeeting] = useState<any>({});
   const [meetingSelected, setMeetingSelected] = useState<any[]>([]);
-  const [monthSelected, setMonthSelected] = useState(moment().format('YYYY-MM'));
-
+  const [monthSelected, setMonthSelected] = useState(
+    moment().format('YYYY-MM'),
+  );
 
   const sortMeeting = useCallback((meetings: any[]) => {
     const activeMeetings: any[] = [];
@@ -79,7 +86,7 @@ const ParentMeetingScreen = (props: any) => {
 
     meetings.forEach(item => {
       if (checkDisableMeeting(item)) {
-        disableMeetings.push({ ...item, isOutOfTime: true });
+        disableMeetings.push({...item, isOutOfTime: true});
       } else {
         activeMeetings.push(item);
       }
@@ -95,7 +102,11 @@ const ParentMeetingScreen = (props: any) => {
   const getMeetingInCurrentMonth = useCallback(async () => {
     // const monthSelected = moment().format('YYYY-MM');
     NavigationActionsService.showLoading();
-    const response = await BaseService.instance.meeting.getMeeting({ date: monthSelected, page: 1, limit: 500 });
+    const response = await BaseService.instance.meeting.getMeeting({
+      date: monthSelected,
+      page: 1,
+      limit: 500,
+    });
     const data: any[] = response.data || [];
     setMeetingData(data);
 
@@ -186,7 +197,8 @@ const ParentMeetingScreen = (props: any) => {
     }
 
     return {
-      borderColor: isSelected && state !== 'today' ? colors.redMeetingColor : colors.white,
+      borderColor:
+        isSelected && state !== 'today' ? colors.redMeetingColor : colors.white,
       borderWidth: 1,
     };
   };
@@ -226,35 +238,46 @@ const ParentMeetingScreen = (props: any) => {
   );
 
   const checkDisableMeeting = (itemMeeting: any) => {
-    if (moment(itemMeeting.date + ' ' + itemMeeting.endTime).isBefore(moment().format())) {
+    if (
+      moment(itemMeeting.date + ' ' + itemMeeting.endTime).isBefore(
+        moment().format(),
+      )
+    ) {
       return true;
     }
     return false;
   };
 
   const onPressSaveCalenda = async (item: any) => {
-
-    const title = await `${item.meeting.name} - ${item.student.fullname} - ${item.student.gradeClass.name}`
+    const title =
+      await `${item.meeting.name} - ${item.student.fullname} - ${item.student.gradeClass.name}`;
     if (Platform.OS == 'ios') {
-
     }
-
 
     AddCalendarEvent.presentEventCreatingDialog({
       title: title,
-      startDate: moment(`${item?.date} ${item?.startTime}`).utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-      endDate: moment(`${item?.date} ${item?.endTime}`).utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-      location: item.student.gradeClass.yearGroup.campus.name
+      startDate: moment(`${item?.date} ${item?.startTime}`)
+        .utc()
+        .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+      endDate: moment(`${item?.date} ${item?.endTime}`)
+        .utc()
+        .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+      location: item.student.gradeClass.yearGroup.campus.name,
     })
-      .then((eventInfo: { calendarItemIdentifier: string, eventIdentifier: string }) => {
-        console.warn('JSON.stringify(eventInfo)', JSON.stringify(eventInfo));
-      })
+      .then(
+        (eventInfo: {
+          calendarItemIdentifier: string;
+          eventIdentifier: string;
+        }) => {
+          console.warn('JSON.stringify(eventInfo)', JSON.stringify(eventInfo));
+        },
+      )
       .catch((error: string) => {
         console.warn(error);
       });
-  }
+  };
   return (
-    <ViewVertical style={{ backgroundColor: colors.background, flex: 1 }}>
+    <ViewVertical style={{backgroundColor: colors.background, flex: 1}}>
       <Header
         noShadow={true}
         stylesHeaderText={{
@@ -266,13 +289,19 @@ const ParentMeetingScreen = (props: any) => {
         }}
         mainText={strings('parentMeeting_title')}
         stylesHeader={styles.header}
-        leftComponent={<Image resizeMode="cover" style={styles.backArrow} source={BACK_ARROW} />}
+        leftComponent={
+          <Image
+            resizeMode="cover"
+            style={styles.backArrow}
+            source={BACK_ARROW}
+          />
+        }
         leftAction={() => NavigationActionsService.pop()}
       />
       <ScrollView>
         <ViewVertical style={styles.container}>
           <Calendar
-            style={{ borderWidth: 1, borderColor: '#BEBEBE', marginBottom: 20 }}
+            style={{borderWidth: 1, borderColor: '#BEBEBE', marginBottom: 20}}
             markedDates={{
               [dateSelected]: SELECTED_DATE,
             }}
@@ -281,13 +310,12 @@ const ParentMeetingScreen = (props: any) => {
             firstDay={1}
             theme={THEME_COLOR}
             onMonthChange={handleMonthChange}
-            dayComponent={({ date, state }) => {
+            dayComponent={({date, state}) => {
               return (
                 <TouchableWithoutFeedback
                   onPress={() => {
                     onDayPress(date, state);
-                  }}
-                >
+                  }}>
                   <View style={styleBackgroundColor(date, state)}>
                     <Text style={styleColorDate(date, state)}>{date.day}</Text>
                     {renderDot(date, state)}
@@ -298,12 +326,24 @@ const ParentMeetingScreen = (props: any) => {
           />
 
           {meetingSelected.length === 0 ? (
-            <Text style={{ textAlign: 'center', fontWeight: '400', fontStyle: 'italic', color: 'black' }}>{strings('parentMeeting_eventNoFound')}</Text>
+            <Text
+              style={{
+                textAlign: 'center',
+                fontWeight: '400',
+                fontStyle: 'italic',
+                color: 'black',
+              }}>
+              {strings('parentMeeting_eventNoFound')}
+            </Text>
           ) : null}
 
           {meetingSelected.map(item => {
             const gradeName = get(item, 'student.gradeClass.name', '');
-            const location = get(item, 'student.gradeClass.yearGroup.campus.name', '');
+            const location = get(
+              item,
+              'student.gradeClass.yearGroup.campus.name',
+              '',
+            );
 
             const time =
               moment(item.startTime, 'HH:mm:ss').format('HH:mm') +
@@ -313,25 +353,39 @@ const ParentMeetingScreen = (props: any) => {
             const isDisableMeeting = !!item.isOutOfTime;
 
             return (
-              <View key={item.id} style={isDisableMeeting ? styles.boxMeetingDisable : styles.boxMeeting}>
-                <Text style={isDisableMeeting ? styles.titleBoxDisable : styles.titleBox}>
+              <View
+                key={item.id}
+                style={
+                  isDisableMeeting
+                    ? styles.boxMeetingDisable
+                    : styles.boxMeeting
+                }>
+                <Text
+                  style={
+                    isDisableMeeting ? styles.titleBoxDisable : styles.titleBox
+                  }>
                   {strings('parentMeeting_titleCalendarMeeting')}
                 </Text>
-                {
-                  !isDisableMeeting ? (
-                    <TouchableOpacity onPress={() => onPressSaveCalenda(item)} style={{ position: 'absolute', right: 20, bottom: 10, zIndex: 999 }}>
-                      <Image source={IC_SHARE}>
-
-                      </Image>
-                    </TouchableOpacity>) : (null)
-                }
+                {!isDisableMeeting ? (
+                  <TouchableOpacity
+                    onPress={() => onPressSaveCalenda(item)}
+                    style={{
+                      position: 'absolute',
+                      right: 20,
+                      bottom: 10,
+                      zIndex: 999,
+                    }}>
+                    <Image source={IC_SHARE}></Image>
+                  </TouchableOpacity>
+                ) : null}
                 <ViewHorizontal style={styles.itemTextIcon}>
                   <Image
                     source={isDisableMeeting ? IC_STUDENT_GRAY : IC_STUDENT}
                     resizeMode="contain"
                     style={styles.icon}
                   />
-                  <Text style={isDisableMeeting ? { color: colors.inactive } : {}}>
+                  <Text
+                    style={isDisableMeeting ? {color: colors.inactive} : {}}>
                     {item.student.fullname + ' - ' + gradeName}
                   </Text>
                 </ViewHorizontal>
@@ -341,15 +395,22 @@ const ParentMeetingScreen = (props: any) => {
                     resizeMode="contain"
                     style={styles.icon}
                   />
-                  <Text style={isDisableMeeting ? { color: colors.inactive } : {}}>{location}</Text>
+                  <Text
+                    style={isDisableMeeting ? {color: colors.inactive} : {}}>
+                    {location}
+                  </Text>
                 </ViewHorizontal>
-                <ViewHorizontal style={{ ...styles.itemTextIcon, marginBottom: 0 }}>
+                <ViewHorizontal
+                  style={{...styles.itemTextIcon, marginBottom: 0}}>
                   <Image
                     source={isDisableMeeting ? IC_CLOCK_GRAY : IC_CLOCK}
                     resizeMode="contain"
                     style={styles.icon}
                   />
-                  <Text style={isDisableMeeting ? { color: colors.inactive } : {}}>{time}</Text>
+                  <Text
+                    style={isDisableMeeting ? {color: colors.inactive} : {}}>
+                    {time}
+                  </Text>
                 </ViewHorizontal>
               </View>
             );

@@ -53,7 +53,9 @@ export interface SubmitFormEnterPassword {
   termConditions: boolean;
 }
 
-const EnterPassword = (props: EnterPasswordProps) => {
+const EnterPassword = ({route}: any) => {
+  const props = route.params;
+
   const dispatch = useDispatch();
   const registerError: any = useSelector<RootState>(
     (state: RootState) => state.auth.register,

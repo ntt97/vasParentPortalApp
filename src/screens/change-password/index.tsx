@@ -55,7 +55,8 @@ const initialValues: PayloadPassword = {
   confirmPassword: '',
 };
 
-const ChangePassScreen = (props: any) => {
+const ChangePassScreen = ({route}: any) => {
+  const props = route.params;
   const dispatch = useDispatch();
 
   const submit = async (values: PayloadPassword) => {

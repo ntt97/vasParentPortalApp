@@ -1,5 +1,5 @@
-import { RequestMethod } from '@constants/index';
-import { LanguageList } from 'types/types';
+import {RequestMethod} from '@constants/index';
+import {LanguageList} from 'types/types';
 
 // import { ApiClient } from './axios';
 import BaseService from 'services';
@@ -13,7 +13,10 @@ export default class LanguageService {
 
   public async getAll(): Promise<LanguageList> {
     try {
-      const response = await LanguageService.baseService.request(RequestMethod.GET, '/languages');
+      const response = await LanguageService.baseService.request(
+        RequestMethod.GET,
+        '/languages',
+      );
       return response.data;
     } catch (err) {
       console.error({
@@ -45,7 +48,7 @@ export default class LanguageService {
       const response = await LanguageService.baseService.request(
         RequestMethod.POST,
         '/registration/language',
-        body
+        body,
       );
       return response.data;
     } catch (err) {

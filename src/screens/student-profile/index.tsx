@@ -1,29 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import { Image, TouchableOpacity, View } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Formik } from 'formik';
+import React, {useEffect, useState} from 'react';
+import {Image, TouchableOpacity, View} from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {Formik} from 'formik';
 import * as yup from 'yup';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { useSelector, useDispatch } from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import NavigationActionsService from '@utils/navigation';
 
 import styles from './styles';
 import colors from 'constants/colors';
 
-import { ViewVertical } from 'components/viewBox.component';
+import {ViewVertical} from 'components/viewBox.component';
 import Header from 'components/header/header.component';
 import Input from 'components/input.component';
 import ListItem from 'components/listItem.component';
 import Button from 'components/button.component';
 import ToastComponent from 'components/toast.component';
 
-import { fontSizes, fontFamilies } from 'constants/fonts';
-import { BACK_ARROW, PROFILE_DEFAULT } from 'assets';
-import { STUDENT_REPORT } from 'constants/index';
+import {fontSizes, fontFamilies} from 'constants/fonts';
+import {BACK_ARROW, PROFILE_DEFAULT} from 'assets';
+import {STUDENT_REPORT} from 'constants/index';
 
-import { RootState } from 'reducers/';
-import { updateStudent, getCurrentStudent, resetMessage } from 'actions/student.action';
-import { strings } from 'utils/i18n';
+import {RootState} from 'reducers/';
+import {
+  updateStudent,
+  getCurrentStudent,
+  resetMessage,
+} from 'actions/student.action';
+import {strings} from 'utils/i18n';
 import BaseService from 'services/';
 import Text from '@components/text.component';
 import dayjs from 'dayjs';
@@ -56,23 +60,33 @@ interface form {
   dateOfBirth: string;
 }
 
-const StudentProfile = (props: any) => {
+const StudentProfile = ({route}: any) => {
+  const props = route.params;
+
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const [disable, setDisable] = useState(true);
-  const [textButton, setTextButton] = useState(strings('studentProfile_btnRequest'));
+  const [textButton, setTextButton] = useState(
+    strings('studentProfile_btnRequest'),
+  );
   const [base, setBase] = useState('');
   const [isDateChange, setIsDateChange] = useState(true);
 
   const dispatch = useDispatch();
 
-  const current: any = useSelector<RootState>((state: RootState) => state.student.current);
-  const language: any = useSelector<RootState>((state: RootState) => state.language.currentLanguage);
+  const current: any = useSelector<RootState>(
+    (state: RootState) => state.student.current,
+  );
+  const language: any = useSelector<RootState>(
+    (state: RootState) => state.language.currentLanguage,
+  );
 
-  const message: any = useSelector<RootState>((state: RootState) => state.student.message.current);
+  const message: any = useSelector<RootState>(
+    (state: RootState) => state.student.message.current,
+  );
 
-  const submit = (values: any, { resetForm }: any) => {
-    const { fullname } = values;
+  const submit = (values: any, {resetForm}: any) => {
+    const {fullname} = values;
 
     const valuesSubmit = {
       studentId: current.id,
@@ -81,7 +95,9 @@ const StudentProfile = (props: any) => {
     };
 
     dispatch(updateStudent(valuesSubmit));
-    current && current.dateOfBirth ? setDate(new Date(current.dateOfBirth)) : '';
+    current && current.dateOfBirth
+      ? setDate(new Date(current.dateOfBirth))
+      : '';
     resetForm({});
     setDisable(true);
     setTextButton(strings('studentProfile_btnRequest'));
@@ -101,7 +117,7 @@ const StudentProfile = (props: any) => {
     setTextButton(strings('studentProfile_btnSubmit'));
   };
 
-  const { type, text } = message;
+  const {type, text} = message;
 
   if (type || text) {
     ToastComponent(type, text);
@@ -118,13 +134,15 @@ const StudentProfile = (props: any) => {
   };
 
   useEffect(() => {
-    dispatch(getCurrentStudent({ studentId: props.studentId }));
+    dispatch(getCurrentStudent({studentId: props.studentId}));
     getAvatar();
-    current && current.dateOfBirth ? setDate(new Date(current.dateOfBirth)) : '';
+    current && current.dateOfBirth
+      ? setDate(new Date(current.dateOfBirth))
+      : '';
   }, [current && current.dateOfBirth]);
 
   return (
-    <ViewVertical style={{ backgroundColor: colors.background }}>
+    <ViewVertical style={{backgroundColor: colors.background}}>
       <ViewVertical style={styles.container}>
         <Header
           noShadow={true}
@@ -137,7 +155,13 @@ const StudentProfile = (props: any) => {
           }}
           mainText={props.studentName || 'Name'}
           stylesHeader={styles.header}
-          leftComponent={<Image resizeMode="cover" style={styles.backarrow} source={BACK_ARROW} />}
+          leftComponent={
+            <Image
+              resizeMode="cover"
+              style={styles.backarrow}
+              source={BACK_ARROW}
+            />
+          }
           leftAction={() => NavigationActionsService.pop()}
         />
         <KeyboardAwareScrollView
@@ -146,19 +170,19 @@ const StudentProfile = (props: any) => {
           enableOnAndroid={true}
           keyboardShouldPersistTaps="handled"
           extraHeight={130}
-          showsVerticalScrollIndicator={false}
-        >
+          showsVerticalScrollIndicator={false}>
           <ViewVertical style={styles.headerStudent}>
             <ListItem
-              containerStyle={{ paddingLeft: 10 }}
+              containerStyle={{paddingLeft: 10}}
               title={current ? current.fullname : ''}
               subtitle={
-                <ViewVertical>
-                  <Text>{current && current.gradeClass ? current.gradeClass.name : ''}</Text>
-                </ViewVertical>
+                current && current.gradeClass ? current.gradeClass.name : ''
               }
               leftAvatar={{
-                source: base && current && current.avatar ? { uri: `data:image/*;base64,${base}` } : PROFILE_DEFAULT,
+                source:
+                  base && current && current.avatar
+                    ? {uri: `data:image/*;base64,${base}`}
+                    : PROFILE_DEFAULT,
                 size: 60,
               }}
             />
@@ -167,14 +191,15 @@ const StudentProfile = (props: any) => {
             initialValues={current ? current : initialValues}
             validationSchema={StudentSchema}
             onSubmit={submit}
-            enableReinitialize={true}
-          >
-            {({ handleSubmit, values, errors, isValid, setValues, dirty }) => (
+            enableReinitialize={true}>
+            {({handleSubmit, values, errors, isValid, setValues, dirty}) => (
               <ViewVertical style={styles.form}>
                 <Input
                   label={strings('studentProfile_labelName')}
                   value={values.fullname}
-                  onChangeText={(field: string) => setValues({ ...values, fullname: field })}
+                  onChangeText={(field: string) =>
+                    setValues({...values, fullname: field})
+                  }
                   labelStyle={styles.labelStyle}
                   errorMessage={errors.fullname}
                   placeholder={strings('studentProfile_labelName')}
@@ -183,11 +208,17 @@ const StudentProfile = (props: any) => {
                   inputContainerStyle={styles.inputContainerStyle}
                   disabled={disable}
                 />
-                <TouchableOpacity onPress={() => setShow(true)} disabled={disable}>
-                  <View pointerEvents="none" style={{ width: '100%' }}>
+                <TouchableOpacity
+                  onPress={() => setShow(true)}
+                  disabled={disable}>
+                  <View pointerEvents="none" style={{width: '100%'}}>
                     <Input
                       label={strings('studentProfile_labelDate')}
-                      value={language == 'vi' ? dayjs(date).format('DD-MM-YYYY') : dayjs(date).format('DD-MMM-YYYY')}
+                      value={
+                        language == 'vi'
+                          ? dayjs(date).format('DD-MM-YYYY')
+                          : dayjs(date).format('DD-MMM-YYYY')
+                      }
                       labelStyle={styles.labelStyle}
                       errorMessage={errors.dateOfBirth}
                       placeholder="19-Fed-2010"
@@ -212,7 +243,11 @@ const StudentProfile = (props: any) => {
                 />
                 <Input
                   label={strings('studentProfile_labelYear')}
-                  value={values.gradeClass && values.gradeClass.yearGroup ? values.gradeClass.yearGroup.name : ''}
+                  value={
+                    values.gradeClass && values.gradeClass.yearGroup
+                      ? values.gradeClass.yearGroup.name
+                      : ''
+                  }
                   // onChangeText={(field: string) => setValues({ ...values, year: field })}
                   labelStyle={styles.labelStyle}
                   // errorMessage={errors.year}

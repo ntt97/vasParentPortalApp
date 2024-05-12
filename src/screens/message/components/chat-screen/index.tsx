@@ -46,7 +46,8 @@ let subscriber: Function = function () {};
 let limit = 15;
 let length = 0;
 let limit100 = 0;
-function ChatScreen(props: any) {
+function ChatScreen({route}: any) {
+  const props = route.params;
   const [isLoading, setIsLoading] = useState(false);
   const [chatData, setChatData] = useState([]);
   const [chatInputContent, setChatInputContent] = useState('');

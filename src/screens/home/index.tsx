@@ -92,7 +92,7 @@ interface AnnoucementProps {
 
 let subscriber: Function = function () {};
 
-const HomeScreen = (props: AnnoucementProps) => {
+const HomeScreen = ({navigation}: any) => {
   const dispatch = useDispatch();
   let notificationOpenedListener: () => void;
   let notificationListener: () => void;
@@ -180,7 +180,7 @@ const HomeScreen = (props: AnnoucementProps) => {
       dispatch(getListStudent({id: user.id}));
     });
     // messageListener();
-    NavigationActionsService.initInstance('HOME_COMPONENT_ID');
+    NavigationActionsService.initInstance(navigation);
     // const channel = new firebase.notifications.Android.Channel(
     //   'event',
     //   'Event notification',
@@ -193,8 +193,8 @@ const HomeScreen = (props: AnnoucementProps) => {
     dispatch(actGetTimeRecall({key: 'RECALL_INTERVAL'}));
     updateFcmToken();
     return () => {
-      notificationListener();
-      notificationOpenedListener();
+      // notificationListener();
+      // notificationOpenedListener();
     };
   }, []);
 
@@ -221,7 +221,7 @@ const HomeScreen = (props: AnnoucementProps) => {
   const setStudentNotification = async () => {
     const data: any = await getNotificationLocal();
     if (data) {
-      dispatch(setNotificationLocal(JSON.parse(data)));
+      // dispatch(setNotificationLocal(JSON.parse(data)));
     }
   };
 
@@ -364,6 +364,10 @@ const HomeScreen = (props: AnnoucementProps) => {
         .where('idTo', '==', user.id)
         .where('isSeen', '==', 0)
         .onSnapshot(snapshot => {
+          if (!snapshot) {
+            return;
+          }
+
           let count = 0;
           snapshot.docs.forEach((data: any) => {
             count++;
@@ -608,7 +612,7 @@ const HomeScreen = (props: AnnoucementProps) => {
             const eventItem: any = data.item;
             const eventDetail: EventDetailItem | undefined =
               eventItem.eventDetails.find(
-                (event: any) => event.languageId === props.currentLanguage,
+                (event: any) => event.languageId === language,
               );
             const eventSchools: any = eventItem.eventSchools || [];
             const isSeen =

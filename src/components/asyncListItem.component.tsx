@@ -62,18 +62,22 @@ const AsyncListItem = ({item, index}: any) => {
   return (
     <ListItem
       key={index}
-      title={item.student.fullname}
-      subtitle={item.student.gradeClass ? item.student.gradeClass.name : ''}
-      leftElement={leftElement(item.student)}
-      rightElement={rightElement(item.student.status)}
       bottomDivider
       onPress={() => {
         NavigationActionsService.push(STUDENT_INFORMATION, {
           studentId: item.studentId,
           studentName: item.student.fullname,
         });
-      }}
-    />
+      }}>
+      {leftElement(item.student)}
+      <ListItem.Content>
+        <ListItem.Title>{item.student.fullname}</ListItem.Title>
+        <ListItem.Subtitle>
+          {item.student.gradeClass ? item.student.gradeClass.name : ''}
+        </ListItem.Subtitle>
+      </ListItem.Content>
+      {rightElement(item.student.status)}
+    </ListItem>
   );
 };
 

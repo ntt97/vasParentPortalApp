@@ -1,23 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import { SafeAreaView, Alert, TouchableOpacity, PermissionsAndroid, Share } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  SafeAreaView,
+  Alert,
+  TouchableOpacity,
+  PermissionsAndroid,
+  Share,
+  Platform,
+} from 'react-native';
 import PDFView from 'react-native-view-pdf';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import styles from './styles';
-import { BASE_URL } from 'constants/config';
+import {BASE_URL} from 'constants/config';
 import NavigationActionsService from '@utils/navigation';
-import { strings } from 'utils/i18n';
+import {strings} from 'utils/i18n';
 import BaseService from 'services/';
 // import RNFetchBlob from 'rn-fetch-blob';
 import ReactNativeBlobUtil from 'react-native-blob-util';
 
-import { getToken } from '@utils/helper';
+import {getToken} from '@utils/helper';
 
-import { isIOS } from '@constants/platform';
-import { ViewHorizontal } from '@components/viewBox.component';
-import { createIconSetFromFontello } from 'react-native-vector-icons';
+import {isIOS} from '@constants/platform';
+import {ViewHorizontal} from '@components/viewBox.component';
+import {createIconSetFromFontello} from 'react-native-vector-icons';
 
-const PdfScreen = (props: any) => {
+const PdfScreen = ({route}: any) => {
+  const props = route.params;
   const [base, setBase] = useState('');
   const onError = () => {
     Alert.alert(strings('msg_headerTitle'), strings('msg_error'), [
@@ -29,16 +37,23 @@ const PdfScreen = (props: any) => {
   };
   const getFile = async () => {
     try {
-      const base = await BaseService.instance.student.getPdf({ id: props.id, link: props.link });
+      const base = await BaseService.instance.student.getPdf({
+        id: props.id,
+        link: props.link,
+      });
       setBase(base);
     } catch (err) {
       if (err === 406) {
-        Alert.alert(strings('studentReport_titleTuitionWarn'), strings('studentReport_descriptionTuitionWarn'), [
-          {
-            text: 'OK',
-            onPress: () => NavigationActionsService.pop(),
-          },
-        ]);
+        Alert.alert(
+          strings('studentReport_titleTuitionWarn'),
+          strings('studentReport_descriptionTuitionWarn'),
+          [
+            {
+              text: 'OK',
+              onPress: () => NavigationActionsService.pop(),
+            },
+          ],
+        );
       } else {
         Alert.alert(strings('msg_headerTitle'), strings('msg_error'), [
           {
@@ -54,14 +69,44 @@ const PdfScreen = (props: any) => {
   useEffect(() => {
     getFile();
   }, []);
+
   function makeid() {
     var text = '';
-    var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var possible =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
-    for (var i = 0; i < 5; i++) text += possible.charAt(Math.floor(Math.random() * possible.length));
+    for (var i = 0; i < 5; i++)
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
 
     return text;
   }
+
+  async function hasAndroidPermission() {
+    if (Number(Platform.Version) >= 33) {
+      return true;
+    }
+
+    const permission = PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE;
+
+    const hasPermission = await PermissionsAndroid.check(permission);
+    if (hasPermission) {
+      return true;
+    }
+
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      {
+        title: 'App need this permission to access your storage',
+        message: '',
+        buttonNeutral: 'Ask Me Later',
+        buttonNegative: 'Cancel',
+        buttonPositive: 'OK',
+      },
+    );
+
+    return granted === PermissionsAndroid.RESULTS.GRANTED;
+  }
+
   async function downloadReport() {
     try {
       if (base === '') {
@@ -69,22 +114,22 @@ const PdfScreen = (props: any) => {
       }
       const token = await getToken();
       // for ios device
-      let path = ReactNativeBlobUtil.fs.dirs.DocumentDir + '/' + `name` + '.pdf';
+      let path =
+        ReactNativeBlobUtil.fs.dirs.DocumentDir + '/' + `name` + '.pdf';
 
       if (!isIOS) {
         // have to request permistion to use useDownloadManager feature
         // for ios device
-        const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, {
-          title: 'App need this permission to access your storage',
-          message: '',
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'OK',
-        });
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        const permissionWrite = await hasAndroidPermission();
+
+        if (permissionWrite) {
           //  Android have save file into the DownloadDir folder
-          path = ReactNativeBlobUtil.fs.dirs.DownloadDir + '/' + props.id + '.pdf';
+          path =
+            ReactNativeBlobUtil.fs.dirs.DownloadDir + '/' + props.id + '.pdf';
         } else {
+          console.log('===========================================');
+          console.log('granted: ', permissionWrite);
+          console.log('===========================================');
           return false;
         }
       }
@@ -106,10 +151,14 @@ const PdfScreen = (props: any) => {
           mediaScannable: true,
           path: path,
         },
-      }).fetch('GET', `${BASE_URL}/student/${props.id}/report-detail?link=${tempLink}`, {
-        Authorization: 'Bearer ' + token,
-        responseType: 'arraybuffer',
-      });
+      }).fetch(
+        'GET',
+        `${BASE_URL}/student/${props.id}/report-detail?link=${tempLink}`,
+        {
+          Authorization: 'Bearer ' + token,
+          responseType: 'arraybuffer',
+        },
+      );
 
       let status = res.info().status;
       if (status === 200) {
@@ -140,7 +189,9 @@ const PdfScreen = (props: any) => {
         <TouchableOpacity style={styles.btnDownload} onPress={downloadReport}>
           <Icon name="download" size={24} color={'#8B1D1F'} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btnClose} onPress={() => NavigationActionsService.pop()}>
+        <TouchableOpacity
+          style={styles.btnClose}
+          onPress={() => NavigationActionsService.pop()}>
           <Icon name="close" size={24} color={'#8B1D1F'} />
         </TouchableOpacity>
       </ViewHorizontal>
@@ -148,7 +199,7 @@ const PdfScreen = (props: any) => {
       {!!base && (
         <PDFView
           fadeInDuration={250.0}
-          style={{ flex: 1 }}
+          style={{flex: 1}}
           onError={onError}
           // onLoad={() => NavigationActionsService.hideLoading()}
           // resource={`${BASE_URL}/student/${props.id}/report-detail?link=${props.link}`}

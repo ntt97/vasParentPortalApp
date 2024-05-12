@@ -26,7 +26,8 @@ let subscriber: Function = function () {};
 let limit = 15;
 let length = 0;
 
-function ChatGroupScreen(props: any) {
+function ChatGroupScreen({route}: any) {
+  const props = route.params;
   const [isLoading, setIsLoading] = useState(false);
   const [chatData, setChatData] = useState([]);
 

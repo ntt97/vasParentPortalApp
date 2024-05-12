@@ -6,49 +6,52 @@
  * @flow
  */
 
-import React, { useEffect, useRef, useState } from 'react';
-import { StatusBar, Keyboard, Image, View } from 'react-native';
-import { Formik } from 'formik';
+import React, {useEffect, useRef, useState} from 'react';
+import {StatusBar, Keyboard, Image, View} from 'react-native';
+import {Formik} from 'formik';
 import * as yup from 'yup';
 import Input from 'components/input.component';
 import Button from 'components/button.component';
 
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { BackgroundComponents } from 'components/background.component';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {BackgroundComponents} from 'components/background.component';
 import colors from 'constants/colors';
-import { fontSizes, fontFamilies } from 'constants/fonts';
+import {fontSizes, fontFamilies} from 'constants/fonts';
 import styles from './styles';
-import { ViewVertical, ViewHorizontal } from 'components/viewBox.component';
+import {ViewVertical, ViewHorizontal} from 'components/viewBox.component';
 import Header from 'components/header/header.component';
 import NavigationActionsService from 'utils/navigation';
-import { useDispatch, useSelector } from 'react-redux';
-import { forgotPassWithSaga, enterPasswordForgotWithSaga, resetMessageForgot } from 'actions/auth.action';
-import { BACK_ARROW_WHITE } from '@assets/index';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  forgotPassWithSaga,
+  enterPasswordForgotWithSaga,
+  resetMessageForgot,
+} from 'actions/auth.action';
+import {BACK_ARROW_WHITE} from '@assets/index';
 
 import Text from '@components/text.component';
-import { RootState } from '@reducers/index';
-import { strings } from '@utils/i18n';
+import {RootState} from '@reducers/index';
+import {strings} from '@utils/i18n';
 
-interface ForgotPasswordProps {
-  componentId: any;
-}
 export interface SubmitFormRegister {
   email: string;
 }
 
-const ForgotPassword = (props: ForgotPasswordProps) => {
+const ForgotPassword = () => {
   const [hideMessage, setHideMessage] = useState(true);
 
   const dispatch = useDispatch();
-  const forgotPasswordError: any = useSelector<RootState>((state: RootState) => state.auth.forgotPassword);
+  const forgotPasswordError: any = useSelector<RootState>(
+    (state: RootState) => state.auth.forgotPassword,
+  );
 
   useEffect(() => {}, []);
 
   const submit = (values: SubmitFormRegister) => {
     setHideMessage(true);
     Keyboard.dismiss();
-    const { email } = values;
-    dispatch(forgotPassWithSaga({ email, moveScreen: true }));
+    const {email} = values;
+    dispatch(forgotPassWithSaga({email, moveScreen: true}));
   };
 
   if (forgotPasswordError.isError && hideMessage) {
@@ -62,7 +65,7 @@ const ForgotPassword = (props: ForgotPasswordProps) => {
     <BackgroundComponents>
       <ViewVertical style={styles.container}>
         <Header
-        isShowRight={false}
+          isShowRight={false}
           noShadow={true}
           stylesHeaderText={{
             color: colors.white,
@@ -74,15 +77,20 @@ const ForgotPassword = (props: ForgotPasswordProps) => {
           stylesHeader={{
             alignItems: 'center',
           }}
-          leftComponent={<Image resizeMode="cover" style={styles.backarrow} source={BACK_ARROW_WHITE} />}
+          leftComponent={
+            <Image
+              resizeMode="cover"
+              style={styles.backarrow}
+              source={BACK_ARROW_WHITE}
+            />
+          }
           leftAction={() => NavigationActionsService.pop()}
         />
         <KeyboardAwareScrollView
           style={styles.scrollView}
           scrollEnabled={false}
           keyboardShouldPersistTaps="handled"
-          contentContainerStyle={styles.contentContainer}
-        >
+          contentContainerStyle={styles.contentContainer}>
           <ViewVertical
             onPress={() => {
               Keyboard.dismiss();
@@ -90,26 +98,29 @@ const ForgotPassword = (props: ForgotPasswordProps) => {
             style={styles.container}
           />
           <Formik
-            initialValues={{ email: '' }}
+            initialValues={{email: ''}}
             onSubmit={submit}
             validationSchema={yup.object().shape({
               email: yup
                 .string()
                 .email(strings('forgot_emailFormat'))
                 .required(strings('forgot_emailRequired')),
-            })}
-          >
-            {({ handleSubmit, values, errors, isValid, setValues }) => (
+            })}>
+            {({handleSubmit, values, errors, isValid, setValues}) => (
               <ViewVertical style={styles.form}>
                 <ViewVertical style={styles.containerLogin}>
                   <ViewHorizontal style={styles.viewTitle}>
-                    <Text style={styles.loginTitle}>{strings('forgot_contentTitle')}</Text>
+                    <Text style={styles.loginTitle}>
+                      {strings('forgot_contentTitle')}
+                    </Text>
                   </ViewHorizontal>
                   <Input
                     value={values.email}
                     autoCapitalize="none"
                     underlineColorAndroid={'transparent'}
-                    onChangeText={(field: string) => setValues({ ...values, email: field })}
+                    onChangeText={(field: string) =>
+                      setValues({...values, email: field})
+                    }
                     errorMessage={errors.email}
                     errorStyle={styles.errorStyle}
                     placeholder={strings('forgot_emailPlaceholder')}
@@ -117,12 +128,16 @@ const ForgotPassword = (props: ForgotPasswordProps) => {
                     placeholderTextColor={colors.placeholderTextColor}
                   />
                   <ViewHorizontal style={styles.viewDes}>
-                    <Text style={styles.desForgot}>{strings('forgot_description')}</Text>
+                    <Text style={styles.desForgot}>
+                      {strings('forgot_description')}
+                    </Text>
                   </ViewHorizontal>
 
                   {forgotPasswordError.isError && hideMessage && (
                     <ViewVertical style={styles.errorLoginContainer}>
-                      <Text style={styles.errorStyle}>* {strings('login_emailError')}</Text>
+                      <Text style={styles.errorStyle}>
+                        * {strings('login_emailError')}
+                      </Text>
                     </ViewVertical>
                   )}
 

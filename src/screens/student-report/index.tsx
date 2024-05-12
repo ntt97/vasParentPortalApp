@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Picker, TouchableOpacity, Image} from 'react-native';
+import {TouchableOpacity, Image} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -17,7 +17,8 @@ import {PDF_SCREEN} from 'constants/index';
 import {strings} from 'utils/i18n';
 import {PROFILE_DEFAULT, DOWN_ARROW_BLACK, DOWN_ARROW_WHITE} from 'assets';
 
-const StudentReport = (props: any) => {
+const StudentReport = ({route}: any) => {
+  const props = route.params;
   const [year, setYear] = useState(0);
   const [period, setPeriod] = useState(0);
   const [arrPeriod, setArrPeriod] = useState<any>([]);
@@ -133,8 +134,7 @@ const StudentReport = (props: any) => {
           size: 60,
         }}
         rightElement={rightElement()}
-        bottomDivider
-      />
+        bottomDivider></ListItem>
 
       <Text style={styles.textStyle}>
         {strings('studentReport_headerTitle')}

@@ -42,7 +42,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function* logout() {
   yield call(setToken, '');
-  yield put(navigationRootAction({name: LOGIN_SCREEN}));
+  yield put(navigationRootAction({name: 'LOGOUT'}));
 }
 
 function* login(action: PayloadAction<string, PayloadLogin>) {

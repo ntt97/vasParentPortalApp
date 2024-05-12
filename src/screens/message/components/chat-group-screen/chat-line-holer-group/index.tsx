@@ -38,7 +38,8 @@ const H = Dimensions.get('window').height;
 
 let children: JSX.Element | null = null;
 
-const ChatLineHolder = (props: any) => {
+const ChatLineHolder = ({route}: any) => {
+  const props = route.params;
   const user: any = useSelector<RootState>(
     (state: RootState) => state.user.profile,
   );

@@ -80,8 +80,8 @@ android {
         applicationId "com.exe.school.vas"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 20
+        versionName "2.0.6"
     }
     signingConfigs {
         debug {
@@ -90,6 +90,14 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+
+        release {
+            storeFile file('parent-portal_key.keystore')
+            storePassword 'Xcode2019'
+            keyAlias 'parent-portal_alias'
+            keyPassword 'Xcode2019'
+        }
+
     }
     buildTypes {
         debug {
@@ -98,7 +106,7 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }

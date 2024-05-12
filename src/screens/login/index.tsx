@@ -24,7 +24,7 @@ import I18n, {strings} from '@utils/i18n';
 
 import BaseService from '../../services';
 import SelectLanguage from '@components/select-language/select-language.component';
-import {setDefaultLanguage} from '@utils/helper';
+import {getDefaultLanguage, setDefaultLanguage} from '@utils/helper';
 import {handleChangeLanguage} from '@actions/language.action';
 import withLanguageChange from '@components/hoc-language/hoc-language';
 import DeviceInfo from 'react-native-device-info';
@@ -33,16 +33,12 @@ import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {isIOS} from '@constants/platform';
 
-interface LoginProps {
-  componentId: any;
-  currentLanguage: string;
-}
 export interface SubmitFormLogin {
   email: string;
   password: string;
 }
 
-const LoginScreen = (props: LoginProps) => {
+const LoginScreen = ({navigation}) => {
   const dispatch = useDispatch();
   const [errorCheckEmail, setErrorCheckEmail] = useState('');
   const [hideMessage, setHideMessage] = useState(true);
@@ -68,9 +64,8 @@ const LoginScreen = (props: LoginProps) => {
     }
   }, []);
   useEffect(() => {
-    NavigationActionsService.initInstance(props.componentId);
+    NavigationActionsService.initInstance(navigation);
     dispatch(selectMenuIndex({selectedMenuIndex: 0}));
-    SplashScreen.hide();
     checkPermission();
   }, []);
 
@@ -146,12 +141,13 @@ const LoginScreen = (props: LoginProps) => {
       checkEmailRegister(email);
     } else {
       Keyboard.dismiss();
+      const defaultKeyLanguage = await getDefaultLanguage();
       dispatch(
         loginWithSaga({
           email,
           password,
           deviceId: firebaseToken || DeviceInfo.getUniqueId(),
-          currentLanguage: props.currentLanguage,
+          currentLanguage: defaultKeyLanguage || 'en',
         }),
       );
     }

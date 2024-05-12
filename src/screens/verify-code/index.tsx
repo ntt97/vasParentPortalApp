@@ -6,18 +6,18 @@
  * @flow
  */
 
-import React, { useEffect, useState } from 'react';
-import { StatusBar, Keyboard, View, BackHandler, Alert } from 'react-native';
-import { Button } from 'react-native-elements';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { BackgroundComponents } from 'components/background.component';
+import React, {useEffect, useState} from 'react';
+import {StatusBar, Keyboard, View, BackHandler, Alert} from 'react-native';
+import {Button} from 'react-native-elements';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {BackgroundComponents} from 'components/background.component';
 import colors from 'constants/colors';
-import { fontSizes, fontFamilies } from 'constants/fonts';
+import {fontSizes, fontFamilies} from 'constants/fonts';
 import styles from './styles';
-import { ViewVertical, ViewHorizontal } from 'components/viewBox.component';
+import {ViewVertical, ViewHorizontal} from 'components/viewBox.component';
 import Header from 'components/header/header.component';
 import NavigationActionsService from 'utils/navigation';
-import { useDispatch, useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   verifyCodeRegisterWithSaga,
   verifyCodeForgotWithSaga,
@@ -26,24 +26,24 @@ import {
 } from 'actions/auth.action';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 
-import { BACK_ARROW_WHITE } from 'assets';
+import {BACK_ARROW_WHITE} from 'assets';
 
 import Text from '@components/text.component';
-import { RootState } from '@reducers/index';
-import { strings } from '@utils/i18n';
+import {RootState} from '@reducers/index';
+import {strings} from '@utils/i18n';
 
-interface VerifyCodeProps {
-  componentId: any;
-  inCase: 'register' | 'forgot_password';
-  email: string;
-}
+const VerifyCode = ({navigation, route}: any) => {
+  const props = route.params;
 
-const VerifyCode = (props: VerifyCodeProps) => {
   const verifyCase = props.inCase;
   const [code, setCode] = useState('');
   const [required, setRequired] = useState('');
-  const registerError: any = useSelector<RootState>((state: RootState) => state.auth.register);
-  const forgotPasswordError: any = useSelector<RootState>((state: RootState) => state.auth.forgotPassword);
+  const registerError: any = useSelector<RootState>(
+    (state: RootState) => state.auth.register,
+  );
+  const forgotPasswordError: any = useSelector<RootState>(
+    (state: RootState) => state.auth.forgotPassword,
+  );
   const [hideMessage, setHideMessage] = useState(true);
   const dispatch = useDispatch();
 
@@ -52,16 +52,19 @@ const VerifyCode = (props: VerifyCodeProps) => {
     const backAction = () => {
       return true;
     };
-    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
     return () => backHandler.remove();
   }, []);
 
   function resendVerifyCode() {
     if (props.inCase === 'register') {
-      dispatch(registerWithSaga({ email: props.email, moveScreen: false }));
+      dispatch(registerWithSaga({email: props.email, moveScreen: false}));
     }
     if (props.inCase === 'forgot_password') {
-      dispatch(forgotPassWithSaga({ email: props.email, moveScreen: false }));
+      dispatch(forgotPassWithSaga({email: props.email, moveScreen: false}));
     }
   }
 
@@ -75,9 +78,21 @@ const VerifyCode = (props: VerifyCodeProps) => {
       setHideMessage(true);
       Keyboard.dismiss();
       if (verifyCase === 'register') {
-        dispatch(verifyCodeRegisterWithSaga({ inCase: verifyCase, code, email: props.email }));
+        dispatch(
+          verifyCodeRegisterWithSaga({
+            inCase: verifyCase,
+            code,
+            email: props.email,
+          }),
+        );
       } else {
-        dispatch(verifyCodeForgotWithSaga({ inCase: verifyCase, code, email: props.email }));
+        dispatch(
+          verifyCodeForgotWithSaga({
+            inCase: verifyCase,
+            code,
+            email: props.email,
+          }),
+        );
       }
       setCode('');
     }
@@ -93,7 +108,7 @@ const VerifyCode = (props: VerifyCodeProps) => {
     <BackgroundComponents>
       <ViewVertical style={styles.container}>
         <Header
-        isShowRight ={false}
+          isShowRight={false}
           noShadow={true}
           stylesHeaderText={{
             color: colors.white,
@@ -116,8 +131,7 @@ const VerifyCode = (props: VerifyCodeProps) => {
           style={styles.scrollView}
           scrollEnabled={false}
           keyboardShouldPersistTaps="handled"
-          contentContainerStyle={styles.contentContainer}
-        >
+          contentContainerStyle={styles.contentContainer}>
           <ViewVertical
             onPress={() => {
               Keyboard.dismiss();
@@ -128,7 +142,9 @@ const VerifyCode = (props: VerifyCodeProps) => {
           <ViewVertical style={styles.form}>
             <ViewVertical style={styles.containerLogin}>
               <ViewHorizontal style={styles.viewTitle}>
-                <Text style={styles.loginTitle}>{strings('verifyCode_contentTitle')}</Text>
+                <Text style={styles.loginTitle}>
+                  {strings('verifyCode_contentTitle')}
+                </Text>
               </ViewHorizontal>
 
               <View style={styles.containerOTP}>
@@ -146,19 +162,29 @@ const VerifyCode = (props: VerifyCodeProps) => {
                 />
               </View>
               <ViewHorizontal style={styles.viewDes}>
-                <Text style={styles.desForgot}>{strings('verifyCode_description')}</Text>
+                <Text style={styles.desForgot}>
+                  {strings('verifyCode_description')}
+                </Text>
               </ViewHorizontal>
 
-              {props.inCase === 'register' && registerError.isError && hideMessage && (
-                <ViewVertical style={styles.errorLoginContainer}>
-                  <Text style={styles.errorStyle}>* {strings('forgot_codeError')}</Text>
-                </ViewVertical>
-              )}
-              {props.inCase === 'forgot_password' && forgotPasswordError.isError && hideMessage && (
-                <ViewVertical style={styles.errorLoginContainer}>
-                  <Text style={styles.errorStyle}>* {strings('forgot_codeError')}</Text>
-                </ViewVertical>
-              )}
+              {props.inCase === 'register' &&
+                registerError.isError &&
+                hideMessage && (
+                  <ViewVertical style={styles.errorLoginContainer}>
+                    <Text style={styles.errorStyle}>
+                      * {strings('forgot_codeError')}
+                    </Text>
+                  </ViewVertical>
+                )}
+              {props.inCase === 'forgot_password' &&
+                forgotPasswordError.isError &&
+                hideMessage && (
+                  <ViewVertical style={styles.errorLoginContainer}>
+                    <Text style={styles.errorStyle}>
+                      * {strings('forgot_codeError')}
+                    </Text>
+                  </ViewVertical>
+                )}
               {required.length > 0 && (
                 <ViewVertical style={styles.errorLoginContainer}>
                   <Text style={styles.errorStyle}>* {required}</Text>
@@ -177,10 +203,12 @@ const VerifyCode = (props: VerifyCodeProps) => {
               />
 
               <ViewHorizontal style={styles.viewDes}>
-                <Text style={styles.desForgot}>{strings('verifyCode_didNotRecieveCode')} </Text>
+                <Text style={styles.desForgot}>
+                  {strings('verifyCode_didNotRecieveCode')}{' '}
+                </Text>
                 <Button
                   type="clear"
-                  buttonStyle={{ padding: 0, margin: 0, borderWidth: 0 }}
+                  buttonStyle={{padding: 0, margin: 0, borderWidth: 0}}
                   onPress={resendVerifyCode}
                   titleStyle={styles.underlineResend}
                   title={strings('verifyCode_resend')}

@@ -79,26 +79,29 @@ const Annoucement = (props: AnnoucementProps) => {
   const current: any = useSelector<RootState>(
     (state: RootState) => state.notification.current,
   );
+  const currentLanguage: any = useSelector<RootState>(
+    (state: RootState) => state.language.currentLanguage,
+  );
 
   useEffect(() => {
-    if (props.currentLanguage) {
+    if (currentLanguage) {
       dispatch(
         getAllEventWithSaga({
           pagination: {page: 1, limit: 10},
           refresh: true,
-          languageId: props.currentLanguage,
+          languageId: currentLanguage,
           eventTypeId: '1',
         }),
       );
     }
-  }, [props.currentLanguage, current]);
+  }, [currentLanguage, current]);
 
   function handleLoadMore() {
     if (!isEndData && !isLoading) {
       dispatch(
         getAllEventWithSaga({
           pagination: {...pagination, page: pagination.page + 1},
-          languageId: props.currentLanguage,
+          languageId: currentLanguage,
           eventTypeId: '1',
         }),
       );
@@ -111,7 +114,7 @@ const Annoucement = (props: AnnoucementProps) => {
       getAllEventWithSaga({
         pagination: {page: 1, limit: 10},
         refresh: true,
-        languageId: props.currentLanguage,
+        languageId: currentLanguage,
         eventTypeId: '1',
       }),
     );
@@ -161,7 +164,7 @@ const Annoucement = (props: AnnoucementProps) => {
           const eventItem = data.item;
           const eventDetail: EventDetailItem | undefined =
             eventItem.eventDetails.find(
-              event => event.languageId === props.currentLanguage,
+              event => event.languageId === currentLanguage,
             );
           const eventSchools: any = eventItem.eventSchools || [];
           if (eventDetail) {

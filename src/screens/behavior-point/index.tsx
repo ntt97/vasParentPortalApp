@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { Image, TouchableOpacity } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
+import React, {useEffect, useState} from 'react';
+import {Image, TouchableOpacity} from 'react-native';
+import {useSelector, useDispatch} from 'react-redux';
 import NavigationActionsService from '@utils/navigation';
 import IconAnt from 'react-native-vector-icons/FontAwesome5';
 import styles from './styles';
 import colors from 'constants/colors';
 
-import { ViewHorizontal, ViewVertical } from 'components/viewBox.component';
+import {ViewHorizontal, ViewVertical} from 'components/viewBox.component';
 import Header from 'components/header/header.component';
 import ToastComponent from 'components/toast.component';
-import { fontSizes, fontFamilies } from 'constants/fonts';
-import { BACK_ARROW, PROFILE_DEFAULT } from 'assets';
-import { RootState } from 'reducers/';
-import { getCurrentStudent, resetMessage } from 'actions/student.action';
-import { strings } from 'utils/i18n';
+import {fontSizes, fontFamilies} from 'constants/fonts';
+import {BACK_ARROW, PROFILE_DEFAULT} from 'assets';
+import {RootState} from 'reducers/';
+import {getCurrentStudent, resetMessage} from 'actions/student.action';
+import {strings} from 'utils/i18n';
 import BaseService from 'services/';
 import Text from '@components/text.component';
 import dayjs from 'dayjs';
-import { Avatar } from 'react-native-elements';
-import { ATTENDANCE_SCREEN, MEAL_SCREEN, STUDENT_PROFILE } from 'constants/';
+import {Avatar} from 'react-native-elements';
+import {ATTENDANCE_SCREEN, MEAL_SCREEN, STUDENT_PROFILE} from 'constants/';
 
 interface form {
   studentId: string;
@@ -75,17 +75,25 @@ const listMenu = [
   },
 ];
 
-const BehaviorPointScreen = (props: any) => {
+const BehaviorPointScreen = ({route}: any) => {
+  const props = route.params;
+
   const [date, setDate] = useState(new Date());
   const [base, setBase] = useState('');
 
   const dispatch = useDispatch();
 
-  const current: any = useSelector<RootState>((state: RootState) => state.student.current);
-  const language: any = useSelector<RootState>((state: RootState) => state.language.currentLanguage);
-  const message: any = useSelector<RootState>((state: RootState) => state.student.message.current);
+  const current: any = useSelector<RootState>(
+    (state: RootState) => state.student.current,
+  );
+  const language: any = useSelector<RootState>(
+    (state: RootState) => state.language.currentLanguage,
+  );
+  const message: any = useSelector<RootState>(
+    (state: RootState) => state.student.message.current,
+  );
 
-  const { type, text } = message;
+  const {type, text} = message;
 
   if (type || text) {
     ToastComponent(type, text);
@@ -102,13 +110,15 @@ const BehaviorPointScreen = (props: any) => {
   };
 
   useEffect(() => {
-    dispatch(getCurrentStudent({ studentId: props.studentId }));
+    dispatch(getCurrentStudent({studentId: props.studentId}));
     getAvatar();
-    current && current.dateOfBirth ? setDate(new Date(current.dateOfBirth)) : '';
+    current && current.dateOfBirth
+      ? setDate(new Date(current.dateOfBirth))
+      : '';
   }, [current && current.dateOfBirth]);
 
   return (
-    <ViewVertical style={{ backgroundColor: colors.background, flex: 1 }}>
+    <ViewVertical style={{backgroundColor: colors.background, flex: 1}}>
       <ViewVertical style={styles.container}>
         <Header
           noShadow={true}
@@ -121,50 +131,86 @@ const BehaviorPointScreen = (props: any) => {
           }}
           mainText={strings('BEHAVIOR_POINT') || 'Name'}
           stylesHeader={styles.header}
-          leftComponent={<Image resizeMode="cover" style={styles.backarrow} source={BACK_ARROW} />}
+          leftComponent={
+            <Image
+              resizeMode="cover"
+              style={styles.backarrow}
+              source={BACK_ARROW}
+            />
+          }
           leftAction={() => NavigationActionsService.pop()}
         />
 
-        <ViewHorizontal style={{ flex: 1 / 3, padding: 20, justifyContent: 'space-between', alignItems: 'center' }}>
+        <ViewHorizontal
+          style={{
+            flex: 1 / 3,
+            padding: 20,
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
           <Avatar
             rounded
-            source={base && current && current.avatar ? { uri: `data:image/*;base64,${base}` } : PROFILE_DEFAULT}
+            source={
+              base && current && current.avatar
+                ? {uri: `data:image/*;base64,${base}`}
+                : PROFILE_DEFAULT
+            }
             size={60}
-            containerStyle={{ marginRight: 15 }}
+            containerStyle={{marginRight: 15}}
           />
 
           <ViewVertical style={styles.form}>
             <ViewHorizontal>
-              <Text style={styles.labelStyle}>{strings('studentProfile_labelName')}:</Text>
-              <Text style={[styles.inputContainerStyle]}>{current.fullname || ''}</Text>
-            </ViewHorizontal>
-
-            <ViewHorizontal>
-              <Text style={styles.labelStyle}>{strings('studentProfile_labelDate')}:</Text>
-              <Text style={styles.inputContainerStyle}>
-                {language == 'vi' ? dayjs(date).format('DD-MM-YYYY') : dayjs(date).format('DD-MMM-YYYY')}
+              <Text style={styles.labelStyle}>
+                {strings('studentProfile_labelName')}:
+              </Text>
+              <Text style={[styles.inputContainerStyle]}>
+                {current.fullname || ''}
               </Text>
             </ViewHorizontal>
 
             <ViewHorizontal>
-              <Text style={styles.labelStyle}>{strings('studentProfile_labelYear')}:</Text>
+              <Text style={styles.labelStyle}>
+                {strings('studentProfile_labelDate')}:
+              </Text>
               <Text style={styles.inputContainerStyle}>
-                {current.gradeClass && current.gradeClass.yearGroup ? current.gradeClass.yearGroup.name : ''}
+                {language == 'vi'
+                  ? dayjs(date).format('DD-MM-YYYY')
+                  : dayjs(date).format('DD-MMM-YYYY')}
               </Text>
             </ViewHorizontal>
 
             <ViewHorizontal>
-              <Text style={styles.labelStyle}>{strings('studentProfile_labelGrade')}:</Text>
-              <Text style={styles.inputContainerStyle}>{current.gradeClass ? current.gradeClass.name : ''}</Text>
+              <Text style={styles.labelStyle}>
+                {strings('studentProfile_labelYear')}:
+              </Text>
+              <Text style={styles.inputContainerStyle}>
+                {current.gradeClass && current.gradeClass.yearGroup
+                  ? current.gradeClass.yearGroup.name
+                  : ''}
+              </Text>
             </ViewHorizontal>
 
             <ViewHorizontal>
-              <Text style={styles.labelStyle}>{strings('studentProfile_labelPupil')}:</Text>
-              <Text style={styles.inputContainerStyle}>{current.pupilCode || ''}</Text>
+              <Text style={styles.labelStyle}>
+                {strings('studentProfile_labelGrade')}:
+              </Text>
+              <Text style={styles.inputContainerStyle}>
+                {current.gradeClass ? current.gradeClass.name : ''}
+              </Text>
+            </ViewHorizontal>
+
+            <ViewHorizontal>
+              <Text style={styles.labelStyle}>
+                {strings('studentProfile_labelPupil')}:
+              </Text>
+              <Text style={styles.inputContainerStyle}>
+                {current.pupilCode || ''}
+              </Text>
             </ViewHorizontal>
           </ViewVertical>
         </ViewHorizontal>
-        <ViewVertical style={{ flex: 2 / 3 }}>
+        <ViewVertical style={{flex: 2 / 3}}>
           <ViewVertical style={styles.containerActivities}>
             {listMenu.map(item => {
               return (
@@ -173,7 +219,7 @@ const BehaviorPointScreen = (props: any) => {
                   <ViewVertical style={styles.itemRight}>
                     <Text numberOfLines={1} style={styles.textIcon}>
                       {item.name}
-                      <Text style={{ color: '#06313E' }}> for </Text>
+                      <Text style={{color: '#06313E'}}> for </Text>
                       {item.name}
                     </Text>
                     <Text numberOfLines={1} style={styles.textIconDesc}>

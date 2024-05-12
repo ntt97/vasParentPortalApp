@@ -6,19 +6,19 @@
  * @flow
  */
 
-import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
-import { Overlay } from 'react-native-elements';
+import React, {useEffect, useState} from 'react';
+import {View} from 'react-native';
+import {Overlay} from 'react-native-elements';
 import Button from 'components/button.component';
 import styles from './styles';
-import { ViewVertical } from 'components/viewBox.component';
+import {ViewVertical} from 'components/viewBox.component';
 import Text from '@components/text.component';
 import SelectLanguage from '@components/select-language/select-language.component';
-import { getDefaultLanguage, setDefaultLanguage } from '@utils/helper';
+import {getDefaultLanguage, setDefaultLanguage} from '@utils/helper';
 import I18n from '@utils/i18n';
-import { handleChangeLanguage } from '@actions/language.action';
-import { useDispatch } from 'react-redux';
-import { DEFAULT_LANGUAGE_INITIAL } from '@constants/users';
+import {handleChangeLanguage} from '@actions/language.action';
+import {useDispatch} from 'react-redux';
+import {DEFAULT_LANGUAGE_INITIAL} from '@constants/users';
 
 interface OverlayLanguageProps {}
 
@@ -56,18 +56,13 @@ const OverlayLanguage = (props: OverlayLanguageProps) => {
   }
 
   return (
-    <Overlay
-      isVisible={overlayLanguage}
-      windowBackgroundColor="rgba(6, 49, 62, 0.2)"
-      overlayBackgroundColor="#FFF"
-      width="80%"
-      height="auto"
-    >
+    <Overlay isVisible={overlayLanguage} overlayStyle={{width: '80%'}}>
       <ViewVertical style={styles.containerOverlay}>
         <Text style={styles.titleLanguage}>Select language</Text>
         <View style={styles.containerDesLaguage}>
           <Text style={styles.desLanguage}>
-            Please select a language that you prefer to display on the application.
+            Please select a language that you prefer to display on the
+            application.
           </Text>
         </View>
         <SelectLanguage emitChangeLanguage={emitChangeLanguage} />

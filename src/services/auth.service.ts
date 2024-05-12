@@ -1,6 +1,6 @@
-import { getRefreshToken } from '@utils/helper';
-import { RequestMethod } from '@constants/index';
-import { Authentication } from 'types/types';
+import {getRefreshToken} from '@utils/helper';
+import {RequestMethod} from '@constants/index';
+import {Authentication} from 'types/types';
 
 // import { ApiClient } from './axios';
 import BaseService from 'services';
@@ -23,11 +23,15 @@ export default class AuthService {
 
   public async login(body: PayloadLogin): Promise<Authentication> {
     try {
-      const response = await AuthService.baseService.request(RequestMethod.POST, '/auth/login', {
-        username: body.email,
-        password: body.password,
-        deviceId: body.deviceId,
-      });
+      const response = await AuthService.baseService.request(
+        RequestMethod.POST,
+        '/auth/login',
+        {
+          username: body.email,
+          password: body.password,
+          deviceId: body.deviceId,
+        },
+      );
       return response.data;
     } catch (err) {
       console.error({
@@ -40,9 +44,13 @@ export default class AuthService {
 
   public async register(body: PayloadRegister): Promise<Authentication> {
     try {
-      const response = await AuthService.baseService.request(RequestMethod.POST, '/registration', {
-        email: body.email,
-      });
+      const response = await AuthService.baseService.request(
+        RequestMethod.POST,
+        '/registration',
+        {
+          email: body.email,
+        },
+      );
       return response.data;
     } catch (err) {
       console.error({
@@ -53,12 +61,18 @@ export default class AuthService {
     }
   }
 
-  public async verifyCodeRegister(body: PayloadVerifyRegister): Promise<Authentication> {
+  public async verifyCodeRegister(
+    body: PayloadVerifyRegister,
+  ): Promise<Authentication> {
     try {
-      const response = await AuthService.baseService.request(RequestMethod.POST, '/registration/verifyCode', {
-        code: body.code,
-        email: body.email,
-      });
+      const response = await AuthService.baseService.request(
+        RequestMethod.POST,
+        '/registration/verifyCode',
+        {
+          code: body.code,
+          email: body.email,
+        },
+      );
       return response.data;
     } catch (err) {
       console.error({
@@ -69,14 +83,20 @@ export default class AuthService {
     }
   }
 
-  public async enterPasswordRegister(body: PayloadEnterPasswordRegister): Promise<Authentication> {
+  public async enterPasswordRegister(
+    body: PayloadEnterPasswordRegister,
+  ): Promise<Authentication> {
     try {
-      const response = await AuthService.baseService.request(RequestMethod.POST, '/registration/password', {
-        email: body.email,
-        registrationToken: body.registrationToken,
-        password: body.password,
-        rePassword: body.rePassword,
-      });
+      const response = await AuthService.baseService.request(
+        RequestMethod.POST,
+        '/registration/password',
+        {
+          email: body.email,
+          registrationToken: body.registrationToken,
+          password: body.password,
+          rePassword: body.rePassword,
+        },
+      );
       return response.data;
     } catch (err) {
       console.error({
@@ -87,11 +107,17 @@ export default class AuthService {
     }
   }
 
-  public async forgotPassword(body: PayloadForgotPassword): Promise<Authentication> {
+  public async forgotPassword(
+    body: PayloadForgotPassword,
+  ): Promise<Authentication> {
     try {
-      const response = await AuthService.baseService.request(RequestMethod.POST, '/forgotPassword', {
-        email: body.email,
-      });
+      const response = await AuthService.baseService.request(
+        RequestMethod.POST,
+        '/forgotPassword',
+        {
+          email: body.email,
+        },
+      );
       return response.data;
     } catch (err) {
       console.error({
@@ -102,12 +128,18 @@ export default class AuthService {
     }
   }
 
-  public async verifyCodeForgotPassword(body: PayloadVerifyForgotPassword): Promise<Authentication> {
+  public async verifyCodeForgotPassword(
+    body: PayloadVerifyForgotPassword,
+  ): Promise<Authentication> {
     try {
-      const response = await AuthService.baseService.request(RequestMethod.POST, '/forgotPassword/verifyCode', {
-        code: body.code,
-        email: body.email,
-      });
+      const response = await AuthService.baseService.request(
+        RequestMethod.POST,
+        '/forgotPassword/verifyCode',
+        {
+          code: body.code,
+          email: body.email,
+        },
+      );
       return response.data;
     } catch (err) {
       console.error({
@@ -118,14 +150,20 @@ export default class AuthService {
     }
   }
 
-  public async enterPasswordForgot(body: PayloadEnterPasswordForgot): Promise<Authentication> {
+  public async enterPasswordForgot(
+    body: PayloadEnterPasswordForgot,
+  ): Promise<Authentication> {
     try {
-      const response = await AuthService.baseService.request(RequestMethod.POST, '/forgotPassword/password', {
-        email: body.email,
-        registrationToken: body.registrationToken,
-        password: body.password,
-        rePassword: body.rePassword,
-      });
+      const response = await AuthService.baseService.request(
+        RequestMethod.POST,
+        '/forgotPassword/password',
+        {
+          email: body.email,
+          registrationToken: body.registrationToken,
+          password: body.password,
+          rePassword: body.rePassword,
+        },
+      );
       return response.data;
     } catch (err) {
       console.error({
@@ -137,15 +175,25 @@ export default class AuthService {
   }
 
   public async checkEmailRegister(email: string): Promise<any> {
-    return AuthService.baseService.request(RequestMethod.GET, '/registration/' + email);
+    return AuthService.baseService.request(
+      RequestMethod.GET,
+      '/registration/' + email,
+    );
   }
 
-  public async refreshToken(refreshToken: string, deviceId: string): Promise<Authentication> {
+  public async refreshToken(
+    refreshToken: string,
+    deviceId: string,
+  ): Promise<Authentication> {
     try {
-      const response = await AuthService.baseService.request(RequestMethod.POST, '/auth/refreshToken', {
-        refreshToken,
-        deviceId,
-      });
+      const response = await AuthService.baseService.request(
+        RequestMethod.POST,
+        '/auth/refreshToken',
+        {
+          refreshToken,
+          deviceId,
+        },
+      );
       return response.data;
     } catch (err) {
       console.error({

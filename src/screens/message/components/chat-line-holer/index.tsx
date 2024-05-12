@@ -41,7 +41,8 @@ const W = Dimensions.get('window').width;
 const H = Dimensions.get('window').height;
 let children: JSX.Element | null = null;
 
-const ChatLineHolder = (props: any) => {
+const ChatLineHolder = ({route}: any) => {
+  const props = route.params;
   const {item, currentPeerUser, style} = props;
   const [modalVisible, setModalVisible] = useState(false);
   const [translate, setTranslate] = useState('');

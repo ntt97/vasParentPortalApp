@@ -86,7 +86,8 @@ const ProfileSchema = () => {
 //   phone: '',
 // };
 
-const UserProfile = (props: any) => {
+const UserProfile = ({route}: any) => {
+  const props = route.params;
   const [pathImg, setPathImg] = useState({});
   const [disable, setDisable] = useState(true);
   const [textButton, setTextButton] = useState(
@@ -107,8 +108,12 @@ const UserProfile = (props: any) => {
     (state: RootState) => state.user.relationship,
   );
 
+  const currentLanguage: any = useSelector<RootState>(
+    (state: RootState) => state.language.currentLanguage,
+  );
+
   const listRelation = relationship.filter(
-    (item: any) => item.languageId === props.currentLanguage,
+    (item: any) => item.languageId === currentLanguage,
   );
   const {type, text} = message;
 

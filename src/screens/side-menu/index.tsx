@@ -33,7 +33,7 @@ import {Menu} from 'types/types';
 import NavigationActionsService from 'utils/navigation';
 import styles from './styles';
 
-const SideMenu = (props: any) => {
+const SideMenu = () => {
   const dispatch = useDispatch();
   const selectedMenuIndex = useSelector<RootState>(
     (state: RootState) => state.navigation.selectedMenuIndex,
